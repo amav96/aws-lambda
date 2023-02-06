@@ -28,7 +28,7 @@ const addTask = async (event: APIGatewayProxyEvent) : Promise<APIGatewayProxyRes
         createdAt: new Date().toString(),
         done: false,
     }
-    console.log(newTask);
+    
     await dynamodb.put({
         TableName: 'TaskTable',
         Item: newTask
