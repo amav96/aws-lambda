@@ -1,10 +1,16 @@
 service: aws-lambda-node-amav96
 frameworkVersion: '3'
 
+# useDotenv: true
+
 provider:
   name: aws
   runtime: nodejs18.x
   region: us-west-2
+  # deploymentBucket:
+  #   name: aws-lambda-node-amav96
+  #   serverSideEncryption: AES256
+
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -25,24 +31,36 @@ functions:
       - httpApi:
           path: /tasks
           method: get
+    package:
+      include:
+        - src/types/Task.ts
   getTask:
     handler: src/getTask.getTask
     events:
       - httpApi:
           path: /tasks/{id}
           method: get
+    package:
+      include:
+        - src/types/Task.ts
   addTask:
     handler: src/addTask.addTask
     events:
       - httpApi:
           path: /tasks
           method: post
+    package:
+      include:
+        - src/types/Task.ts
   updateTask:
     handler: src/updateTask.updateTask
     events:
       - httpApi:
           path: /tasks/{id}
           method: put
+    package:
+      include:
+        - src/types/Task.ts
   deleteTask:
     handler: src/deleteTask.deleteTask
     events:
@@ -63,3 +81,10 @@ resources:
         KeySchema:
           - AttributeName: id
             KeyType: HASH
+
+plugins:
+  # - serverless-esbuild
+  - serverless-offline
+  # - serverless-deployment-bucket
+  - serverless-plugin-typescript
+
